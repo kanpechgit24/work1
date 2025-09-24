@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Arcade Profile</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc);
+      background-size: 300% 300%;
+      animation: bgAnimation 8s infinite alternate;
+    }
+
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    .profile-card {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 25px #ff00cc, 0 0 40px #00ffcc;
+      max-width: 400px;
+      width: 90%;
+      color: #fff;
+    }
+
+    .profile-card img {
+      width: 160px;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid #00ffcc;
+      box-shadow: 0 0 15px #ff00cc, 0 0 25px #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    .profile-card h1 {
+      font-size: 18px;
+      margin: 15px 0;
+      color: #ffcc00;
+      text-shadow: 0 0 5px #ff00cc, 0 0 10px #00ffcc;
+    }
+
+    .profile-card p {
+      font-size: 12px;
+      margin: 10px 0;
+      color: #ffffffcc;
+    }
+
+    .profile-card a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: #ff00cc;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff00cc, 0 0 20px #00ffcc;
+      transition: 0.3s;
+    }
+
+    .profile-card a:hover {
+      background: #00ffcc;
+      box-shadow: 0 0 15px #00ffcc, 0 0 30px #ff00cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <img src="S__3514370_0.jpg" alt="Profile">
+    <h1>Kanpech Wichaiwong</h1>
+    <p>E-mail: Kanpechrw@hotmail.com</p>
+    <p>Department: Information Science</p>
+    <p>Faculty: Information Science</p>
+    <a href="mailto:Kanpechrw@hotmail.com">Start Game</a>
+  </div>
+</body>
+</html>
