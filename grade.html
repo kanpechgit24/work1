@@ -24,13 +24,13 @@
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-red-50 text-gray-800">
+<body class="bg-gradient-to-br from-blue-700 to-red-700 text-white">
     <!-- Main container -->
     <div class="container mx-auto p-4 md:p-8">
         <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-6xl font-extrabold text-blue-900 drop-shadow-lg">ระบบคำนวณเกรด</h1>
-            <p class="mt-2 text-lg text-blue-800">สำหรับคุณครูผู้ใจดี</p>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white drop-shadow-lg">ระบบคำนวณเกรด</h1>
+            <p class="mt-2 text-lg text-white">สำหรับคุณครูผู้ใจดี</p>
         </header>
 
         <!-- Grade Calculation Weights Form -->
@@ -95,6 +95,9 @@
                 </table>
             </div>
             <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="importFromCsv()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    นำเข้าจาก CSV
+                </button>
                 <button onclick="calculateAllGrades()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                     คำนวณเกรดทั้งหมด
                 </button>
@@ -219,6 +222,48 @@
             } else {
                 renderTable(); // Revert back to original value if input is invalid
             }
+        }
+
+        // Function to import data from a CSV file
+        function importFromCsv() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.csv';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput);
+
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const csvContent = e.target.result;
+                    const rows = csvContent.split('\n').map(row => row.trim()).filter(row => row.length > 0);
+                    
+                    if (rows.length > 1) {
+                        for (let i = 1; i < rows.length; i++) {
+                            const columns = rows[i].split(',');
+                            // Assuming CSV format: Name, Work Score, Exam Score
+                            const name = columns[0] ? columns[0].trim() : '';
+                            const workScore = parseFloat(columns[1]);
+                            const examScore = parseFloat(columns[2]);
+                            
+                            if (name && !isNaN(workScore) && !isNaN(examScore)) {
+                                students.push({ name, workScore, examScore });
+                            }
+                        }
+                        saveStudents();
+                        renderTable();
+                    }
+                };
+                reader.readAsText(file);
+                document.body.removeChild(fileInput);
+            });
+
+            fileInput.click();
         }
 
         // Function to calculate total score
