@@ -101,6 +101,9 @@
                 <button onclick="exportToCsv()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
                     ส่งออกเป็น CSV
                 </button>
+                <button onclick="clearAllData()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    ล้างข้อมูลทั้งหมด
+                </button>
             </div>
         </section>
     </div>
@@ -169,7 +172,7 @@
                     <td class="px-4 py-3 text-center text-sm font-medium text-slate-900">${index + 1}</td>
                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-900">${student.name}</td>
                     <td class="px-4 py-3 text-center text-sm text-slate-500">${student.workScore}</td>
-                    <td class="px-4 py-3 text-center text-sm text-slate-500">${student.examScore}</td>
+                    <td class="px-4 py-3 text-center text-sm text-slate-500 editable-exam-score" data-index="${index}">${student.examScore}</td>
                     <td class="px-4 py-3 text-center text-sm font-semibold text-slate-700">${totalScore.toFixed(2)}</td>
                     <td class="px-4 py-3 text-center text-sm ${gradeColor(grade)}">${grade}</td>
                     <td class="px-4 py-3 text-center text-sm">
@@ -178,6 +181,44 @@
                 `;
                 tableBody.appendChild(row);
             });
+            // Add event listeners for editing exam scores
+            document.querySelectorAll('.editable-exam-score').forEach(cell => {
+                cell.addEventListener('click', (event) => {
+                    const index = event.target.dataset.index;
+                    const currentValue = students[index].examScore;
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.value = currentValue;
+                    input.min = 0;
+                    input.max = 100;
+                    input.className = 'w-full text-center border rounded-md';
+                    
+                    event.target.innerHTML = '';
+                    event.target.appendChild(input);
+                    input.focus();
+
+                    input.addEventListener('blur', () => {
+                        updateExamScore(index, input.value);
+                    });
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            updateExamScore(index, input.value);
+                        }
+                    });
+                });
+            });
+        }
+
+        // Function to update exam score and re-render
+        function updateExamScore(index, newScore) {
+            const score = parseFloat(newScore);
+            if (!isNaN(score) && score >= 0 && score <= 100) {
+                students[index].examScore = score;
+                saveStudents();
+                renderTable();
+            } else {
+                renderTable(); // Revert back to original value if input is invalid
+            }
         }
 
         // Function to calculate total score
@@ -246,6 +287,13 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // Function to clear all student data
+        function clearAllData() {
+            students = [];
+            localStorage.removeItem(localStorageKey);
+            renderTable();
         }
 
         // Event listener for form submission
